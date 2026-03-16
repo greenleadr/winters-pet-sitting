@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'green' | 'blue' | 'purple' | 'gray' | 'yellow' | 'red';
+  variant?: 'orange' | 'purple' | 'indigo' | 'gray' | 'yellow' | 'red' | 'green';
   size?: 'sm' | 'md';
 }
 
@@ -12,12 +12,13 @@ export default function Badge({ children, variant = 'gray', size = 'sm' }: Badge
       className={clsx(
         'inline-flex items-center font-medium rounded-full',
         {
-          'bg-emerald-100 text-emerald-800': variant === 'green',
-          'bg-blue-100 text-blue-800': variant === 'blue',
-          'bg-purple-100 text-purple-800': variant === 'purple',
-          'bg-gray-100 text-gray-700': variant === 'gray',
-          'bg-yellow-100 text-yellow-800': variant === 'yellow',
-          'bg-red-100 text-red-800': variant === 'red',
+          'bg-orange-500/20 text-orange-300 ring-1 ring-orange-500/30': variant === 'orange',
+          'bg-purple-500/20 text-purple-300 ring-1 ring-purple-500/30': variant === 'purple',
+          'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/30': variant === 'indigo',
+          'bg-gray-700/60 text-gray-300': variant === 'gray',
+          'bg-yellow-500/20 text-yellow-300 ring-1 ring-yellow-500/30': variant === 'yellow',
+          'bg-red-500/20 text-red-400 ring-1 ring-red-500/30': variant === 'red',
+          'bg-green-500/20 text-green-300 ring-1 ring-green-500/30': variant === 'green',
           'px-2 py-0.5 text-xs': size === 'sm',
           'px-2.5 py-1 text-sm': size === 'md',
         }

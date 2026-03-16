@@ -21,18 +21,12 @@ export default function DeleteClientButton({ clientId, clientName }: DeleteClien
     setLoading(true);
     setError('');
     const supabase = createClient();
-
     const { error: deleteError } = await supabase
       .from('clients')
       .update({ is_active: false, deleted_at: new Date().toISOString() })
       .eq('id', clientId);
 
-    if (deleteError) {
-      setError('Failed to delete client. Please try again.');
-      setLoading(false);
-      return;
-    }
-
+    if (deleteError) { setError('Failed to archive client. Please try again.'); setLoading(false); return; }
     router.push('/clients');
     router.refresh();
   };
@@ -42,7 +36,7 @@ export default function DeleteClientButton({ clientId, clientName }: DeleteClien
       <Button
         variant="ghost"
         size="sm"
-        className="text-red-500 hover:bg-red-50 gap-1.5 w-full justify-center"
+        className="text-red-500 hover:bg-red-950/30 gap-1.5 w-full justify-center"
         onClick={() => setConfirming(true)}
       >
         <TrashIcon className="h-4 w-4" />
@@ -52,32 +46,17 @@ export default function DeleteClientButton({ clientId, clientName }: DeleteClien
   }
 
   return (
-    <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3">
-      <p className="text-sm text-red-800 font-medium text-center">
+    <div className="bg-red-950/30 border border-red-800/50 rounded-xl p-4 space-y-3">
+      <p className="text-sm text-red-300 font-medium text-center">
         Archive <strong>{clientName}</strong>?
       </p>
-      <p className="text-xs text-red-700 text-center">
+      <p className="text-xs text-red-400 text-center">
         The client will be hidden from your list but data is preserved.
       </p>
-      {error && <p className="text-xs text-red-600 text-center">{error}</p>}
+      {error && <p className="text-xs text-red-400 text-center">{error}</p>}
       <div className="flex gap-2">
-        <Button
-          variant="secondary"
-          size="sm"
-          fullWidth
-          onClick={() => setConfirming(false)}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="danger"
-          size="sm"
-          fullWidth
-          loading={loading}
-          onClick={handleSoftDelete}
-        >
-          Archive
-        </Button>
+        <Button variant="secondary" size="sm" fullWidth onClick={() => setConfirming(false)}>Cancel</Button>
+        <Button variant="danger" size="sm" fullWidth loading={loading} onClick={handleSoftDelete}>Archive</Button>
       </div>
     </div>
   );

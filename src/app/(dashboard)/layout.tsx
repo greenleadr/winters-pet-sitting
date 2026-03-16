@@ -6,7 +6,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-950">
       {/* Main content with bottom padding for nav */}
       <main className="pb-20 max-w-screen-sm mx-auto">{children}</main>
       <BottomNav />

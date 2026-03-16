@@ -51,19 +51,16 @@ export default function ClientList({ clients, searchQuery, serviceFilter }: Clie
     <div className="px-4 py-3 space-y-3">
       {/* Search box */}
       <div className="relative">
-        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
         <input
           type="search"
           value={search}
           onChange={handleSearch}
           placeholder="Search clients…"
-          className="w-full pl-9 pr-9 py-2.5 text-sm rounded-xl border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="w-full pl-9 pr-9 py-2.5 text-sm rounded-xl border border-gray-700 bg-gray-800 text-gray-100 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
         />
         {search && (
-          <button
-            onClick={clearSearch}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={clearSearch} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
             <XIcon className="h-4 w-4" />
           </button>
         )}
@@ -78,8 +75,8 @@ export default function ClientList({ clients, searchQuery, serviceFilter }: Clie
             className={clsx(
               'shrink-0 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors',
               serviceFilter === f.value
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-white text-gray-600 border-gray-300 hover:border-emerald-400'
+                ? 'bg-orange-500 text-white border-orange-500'
+                : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-orange-500 hover:text-orange-400'
             )}
           >
             {f.label}
@@ -90,25 +87,20 @@ export default function ClientList({ clients, searchQuery, serviceFilter }: Clie
       {/* Results */}
       {clients.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <UsersIcon className="h-12 w-12 text-gray-300 mb-3" />
+          <UsersIcon className="h-12 w-12 text-gray-700 mb-3" />
           <p className="text-gray-500 font-medium">No clients found</p>
           {(search || serviceFilter) && (
-            <p className="text-gray-400 text-sm mt-1">Try adjusting your search or filter</p>
+            <p className="text-gray-600 text-sm mt-1">Try adjusting your search or filter</p>
           )}
           {!search && !serviceFilter && (
-            <Link
-              href="/clients/new"
-              className="mt-4 text-sm text-emerald-600 font-medium hover:underline"
-            >
+            <Link href="/clients/new" className="mt-4 text-sm text-orange-400 font-medium hover:underline">
               Add your first client
             </Link>
           )}
         </div>
       ) : (
         <div className="space-y-2">
-          <p className="text-xs text-gray-500">
-            {clients.length} client{clients.length !== 1 ? 's' : ''}
-          </p>
+          <p className="text-xs text-gray-600">{clients.length} client{clients.length !== 1 ? 's' : ''}</p>
           {clients.map((client) => (
             <ClientCard key={client.id} client={client} />
           ))}

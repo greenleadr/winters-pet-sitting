@@ -89,9 +89,9 @@ export default function AppointmentCalendar({ appointments, clients }: Appointme
 
   const eventStyleGetter = (event: CalendarEvent) => {
     const serviceType = event.resource.service_type;
-    let backgroundColor = '#059669';
-    if (serviceType === 'pet_sitting') backgroundColor = '#7c3aed';
-    if (serviceType === 'house_cleaning') backgroundColor = '#0891b2';
+    let backgroundColor = '#f97316'; // orange — other/no service type
+    if (serviceType === 'pet_sitting') backgroundColor = '#a855f7'; // purple
+    if (serviceType === 'house_cleaning') backgroundColor = '#6366f1'; // indigo
     return { style: { backgroundColor, border: 'none', borderRadius: '4px', fontSize: '11px', color: 'white' } };
   };
 
@@ -171,17 +171,17 @@ export default function AppointmentCalendar({ appointments, clients }: Appointme
   return (
     <div>
       {/* Controls */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
-        <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700 bg-gray-900">
+        <div className="flex rounded-lg border border-gray-700 overflow-hidden">
           <button
             onClick={() => setView('week')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors ${view === 'week' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors ${view === 'week' ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
           >
             <CalendarIcon className="h-3.5 w-3.5" /> Week
           </button>
           <button
             onClick={() => setView('agenda')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors border-l border-gray-200 ${view === 'agenda' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors border-l border-gray-700 ${view === 'agenda' ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
           >
             <ListIcon className="h-3.5 w-3.5" /> List
           </button>
@@ -192,14 +192,14 @@ export default function AppointmentCalendar({ appointments, clients }: Appointme
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-white border-b border-gray-100">
-        <span className="flex items-center gap-1 text-xs text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block" /> Pet Sitting</span>
-        <span className="flex items-center gap-1 text-xs text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-cyan-600 inline-block" /> Cleaning</span>
-        <span className="flex items-center gap-1 text-xs text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" /> Other</span>
+      <div className="flex items-center gap-3 px-4 py-2 bg-gray-900 border-b border-gray-700">
+        <span className="flex items-center gap-1 text-xs text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block" /> Pet Sitting</span>
+        <span className="flex items-center gap-1 text-xs text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Cleaning</span>
+        <span className="flex items-center gap-1 text-xs text-gray-500"><span className="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block" /> Other</span>
       </div>
 
       {/* Calendar */}
-      <div className="bg-white" style={{ height: view === 'agenda' ? 'auto' : '65vh', minHeight: '400px' }}>
+      <div className="bg-gray-900" style={{ height: view === 'agenda' ? 'auto' : '65vh', minHeight: '400px' }}>
         <Calendar
           localizer={localizer}
           events={events}
@@ -219,9 +219,9 @@ export default function AppointmentCalendar({ appointments, clients }: Appointme
 
       {view === 'agenda' && appointments.length === 0 && (
         <div className="px-4 py-12 text-center">
-          <CalendarIcon className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+          <CalendarIcon className="h-10 w-10 text-gray-700 mx-auto mb-3" />
           <p className="text-gray-500">No upcoming appointments.</p>
-          <button onClick={() => openNewModal()} className="mt-3 text-sm text-emerald-600 font-medium hover:underline">
+          <button onClick={() => openNewModal()} className="mt-3 text-sm text-orange-400 font-medium hover:underline">
             Schedule one now
           </button>
         </div>
@@ -253,15 +253,15 @@ export default function AppointmentCalendar({ appointments, clients }: Appointme
         <Modal open={detailModalOpen} onClose={() => { setDetailModalOpen(false); setSelectedAppointment(null); }} title="Appointment">
           <div className="space-y-3">
             <div>
-              <h3 className="font-semibold text-gray-900 text-base">{selectedAppointment.title}</h3>
+              <h3 className="font-semibold text-gray-100 text-base">{selectedAppointment.title}</h3>
               {selectedAppointment.client && (
-                <p className="text-sm text-gray-600 mt-0.5">
+                <p className="text-sm text-gray-400 mt-0.5">
                   {(selectedAppointment.client as any).first_name} {(selectedAppointment.client as any).last_name}
                 </p>
               )}
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <CalendarIcon className="h-4 w-4 text-gray-400" />
+            <div className="flex items-center gap-2 text-sm text-gray-200">
+              <CalendarIcon className="h-4 w-4 text-gray-500" />
               <div>
                 <p>{format(new Date(selectedAppointment.start_time), 'EEEE, MMM d, yyyy')}</p>
                 <p className="text-gray-500">
@@ -272,26 +272,26 @@ export default function AppointmentCalendar({ appointments, clients }: Appointme
             {selectedAppointment.service_type && (
               <div>
                 {selectedAppointment.service_type === 'pet_sitting' && <Badge variant="purple">Pet Sitting</Badge>}
-                {selectedAppointment.service_type === 'house_cleaning' && <Badge variant="blue">House Cleaning</Badge>}
+                {selectedAppointment.service_type === 'house_cleaning' && <Badge variant="indigo">House Cleaning</Badge>}
               </div>
             )}
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Payment:</span>
+              <span className="text-sm text-gray-400">Payment:</span>
               <PaymentBadge status={selectedAppointment.payment_status} />
             </div>
             {selectedAppointment.payment_notes && (
               <div>
                 <p className="text-xs text-gray-500">Payment Notes</p>
-                <p className="text-sm text-gray-900">{selectedAppointment.payment_notes}</p>
+                <p className="text-sm text-gray-200">{selectedAppointment.payment_notes}</p>
               </div>
             )}
             {selectedAppointment.notes && (
               <div>
                 <p className="text-xs text-gray-500">Notes</p>
-                <p className="text-sm text-gray-900 whitespace-pre-wrap">{selectedAppointment.notes}</p>
+                <p className="text-sm text-gray-200 whitespace-pre-wrap">{selectedAppointment.notes}</p>
               </div>
             )}
-            <div className="pt-2 border-t border-gray-100">
+            <div className="pt-2 border-t border-gray-700">
               <Button variant="danger" size="sm" fullWidth loading={deleting} onClick={() => handleDelete(selectedAppointment.id)} className="gap-1.5">
                 <TrashIcon className="h-4 w-4" /> Delete Appointment
               </Button>

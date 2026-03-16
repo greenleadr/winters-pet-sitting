@@ -35,7 +35,7 @@ export default async function ClientDetailPage({
     return (
       <div className="flex flex-col gap-0.5">
         <span className="text-xs text-gray-500">{label}</span>
-        <span className="text-sm text-gray-900 font-medium">{value}</span>
+        <span className="text-sm text-gray-100 font-medium">{value}</span>
       </div>
     );
   }
@@ -58,27 +58,27 @@ export default async function ClientDetailPage({
 
       <div className="px-4 py-3 space-y-3">
         {/* Service type + quick contact */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+        <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
             {client.service_type === 'pet_sitting' && <Badge variant="purple" size="md">Pet Sitting</Badge>}
-            {client.service_type === 'house_cleaning' && <Badge variant="blue" size="md">House Cleaning</Badge>}
+            {client.service_type === 'house_cleaning' && <Badge variant="indigo" size="md">House Cleaning</Badge>}
             {client.service_type === 'both' && (
               <>
                 <Badge variant="purple" size="md">Pet Sitting</Badge>
-                <Badge variant="blue" size="md">House Cleaning</Badge>
+                <Badge variant="indigo" size="md">House Cleaning</Badge>
               </>
             )}
           </div>
 
           <div className="space-y-2">
             {client.phone && (
-              <a href={`tel:${client.phone}`} className="flex items-center gap-2 text-sm text-emerald-700 font-medium">
+              <a href={`tel:${client.phone}`} className="flex items-center gap-2 text-sm text-orange-400 font-medium">
                 <PhoneIcon className="h-4 w-4" />
                 {client.phone}
               </a>
             )}
             {client.email && (
-              <a href={`mailto:${client.email}`} className="flex items-center gap-2 text-sm text-gray-600">
+              <a href={`mailto:${client.email}`} className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200">
                 <MailIcon className="h-4 w-4" />
                 {client.email}
               </a>
@@ -88,7 +88,7 @@ export default async function ClientDetailPage({
                 href={`https://maps.google.com/?q=${encodeURIComponent(client.address)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-gray-600"
+                className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200"
               >
                 <MapPinIcon className="h-4 w-4 shrink-0" />
                 <span>{client.address}</span>
@@ -99,25 +99,23 @@ export default async function ClientDetailPage({
 
         {/* Access & Entry */}
         {(client.access_code || client.key_location || client.gate_code || client.alarm_code || client.parking_instructions) && (
-          <CollapsibleSection title="Access & Entry" icon={<KeyIcon className="h-4 w-4 text-amber-600" />} defaultOpen={true}>
+          <CollapsibleSection title="Access & Entry" icon={<KeyIcon className="h-4 w-4 text-orange-400" />} defaultOpen={true}>
             <div className="grid grid-cols-2 gap-3">
               <InfoRow label="Access Code" value={client.access_code} />
               <InfoRow label="Key Location" value={client.key_location} />
               <InfoRow label="Gate Code" value={client.gate_code} />
               <InfoRow label="Alarm Code" value={client.alarm_code} />
             </div>
-            {client.parking_instructions && (
-              <InfoRow label="Parking" value={client.parking_instructions} />
-            )}
+            {client.parking_instructions && <InfoRow label="Parking" value={client.parking_instructions} />}
           </CollapsibleSection>
         )}
 
         {/* Emergency Contact */}
         {(client.emergency_contact_name || client.emergency_contact_phone) && (
-          <CollapsibleSection title="Emergency Contact" icon={<AlertCircleIcon className="h-4 w-4 text-red-500" />} defaultOpen={true}>
+          <CollapsibleSection title="Emergency Contact" icon={<AlertCircleIcon className="h-4 w-4 text-red-400" />} defaultOpen={true}>
             <InfoRow label="Name" value={client.emergency_contact_name} />
             {client.emergency_contact_phone && (
-              <a href={`tel:${client.emergency_contact_phone}`} className="flex items-center gap-2 text-sm text-emerald-700 font-medium">
+              <a href={`tel:${client.emergency_contact_phone}`} className="flex items-center gap-2 text-sm text-orange-400 font-medium">
                 <PhoneIcon className="h-4 w-4" />
                 {client.emergency_contact_phone}
               </a>
@@ -129,16 +127,16 @@ export default async function ClientDetailPage({
         {isPetSitting && (
           <CollapsibleSection
             title="Pets"
-            icon={<PawPrintIcon className="h-4 w-4 text-purple-600" />}
+            icon={<PawPrintIcon className="h-4 w-4 text-purple-400" />}
             badge={client.pets?.length || 0}
             defaultOpen={true}
           >
             {client.pets && client.pets.length > 0 ? (
               <div className="space-y-4">
                 {client.pets.map((pet: any) => (
-                  <div key={pet.id} className="border-t border-gray-100 pt-3 first:border-0 first:pt-0">
+                  <div key={pet.id} className="border-t border-gray-700 pt-3 first:border-0 first:pt-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="font-semibold text-sm text-gray-900">{pet.name}</span>
+                      <span className="font-semibold text-sm text-gray-100">{pet.name}</span>
                       {pet.species && <Badge variant="gray">{pet.species}</Badge>}
                       {pet.breed && <span className="text-xs text-gray-500">{pet.breed}</span>}
                     </div>
@@ -148,34 +146,26 @@ export default async function ClientDetailPage({
                       <InfoRow label="Indoor/Outdoor" value={pet.outdoor_indoor} />
                     </div>
                     {pet.medications && (
-                      <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2.5">
-                        <p className="text-xs font-semibold text-amber-800 mb-1">Medications</p>
-                        <p className="text-sm text-amber-900">{pet.medications}</p>
+                      <div className="mt-2 bg-orange-950/40 border border-orange-800/50 rounded-lg p-2.5">
+                        <p className="text-xs font-semibold text-orange-400 mb-1">Medications</p>
+                        <p className="text-sm text-orange-200">{pet.medications}</p>
                       </div>
                     )}
                     {pet.feeding_instructions && (
-                      <div className="mt-2">
-                        <InfoRow label="Feeding Instructions" value={pet.feeding_instructions} />
-                      </div>
+                      <div className="mt-2"><InfoRow label="Feeding Instructions" value={pet.feeding_instructions} /></div>
                     )}
                     {pet.behavioral_notes && (
-                      <div className="mt-2">
-                        <InfoRow label="Behavioral Notes" value={pet.behavioral_notes} />
-                      </div>
+                      <div className="mt-2"><InfoRow label="Behavioral Notes" value={pet.behavioral_notes} /></div>
                     )}
                     {pet.walk_instructions && (
-                      <div className="mt-2">
-                        <InfoRow label="Walk Instructions" value={pet.walk_instructions} />
-                      </div>
+                      <div className="mt-2"><InfoRow label="Walk Instructions" value={pet.walk_instructions} /></div>
                     )}
                     {(pet.vet_name || pet.vet_phone) && (
-                      <div className="mt-2 pt-2 border-t border-gray-100">
+                      <div className="mt-2 pt-2 border-t border-gray-700">
                         <p className="text-xs text-gray-500 mb-1">Vet</p>
-                        {pet.vet_name && <p className="text-sm font-medium text-gray-900">{pet.vet_name}</p>}
+                        {pet.vet_name && <p className="text-sm font-medium text-gray-100">{pet.vet_name}</p>}
                         {pet.vet_phone && (
-                          <a href={`tel:${pet.vet_phone}`} className="text-sm text-emerald-700">
-                            {pet.vet_phone}
-                          </a>
+                          <a href={`tel:${pet.vet_phone}`} className="text-sm text-orange-400">{pet.vet_phone}</a>
                         )}
                         {pet.vet_address && <p className="text-xs text-gray-500">{pet.vet_address}</p>}
                       </div>
@@ -183,11 +173,9 @@ export default async function ClientDetailPage({
                     {(pet.emergency_vet_name || pet.emergency_vet_phone) && (
                       <div className="mt-2">
                         <p className="text-xs text-gray-500 mb-1">Emergency Vet</p>
-                        {pet.emergency_vet_name && <p className="text-sm font-medium text-gray-900">{pet.emergency_vet_name}</p>}
+                        {pet.emergency_vet_name && <p className="text-sm font-medium text-gray-100">{pet.emergency_vet_name}</p>}
                         {pet.emergency_vet_phone && (
-                          <a href={`tel:${pet.emergency_vet_phone}`} className="text-sm text-emerald-700">
-                            {pet.emergency_vet_phone}
-                          </a>
+                          <a href={`tel:${pet.emergency_vet_phone}`} className="text-sm text-orange-400">{pet.emergency_vet_phone}</a>
                         )}
                       </div>
                     )}
@@ -202,7 +190,7 @@ export default async function ClientDetailPage({
 
         {/* House Cleaning */}
         {isCleaning && (
-          <CollapsibleSection title="Cleaning Details" icon={<HomeIcon className="h-4 w-4 text-blue-600" />} defaultOpen={false}>
+          <CollapsibleSection title="Cleaning Details" icon={<HomeIcon className="h-4 w-4 text-indigo-400" />} defaultOpen={false}>
             <div className="grid grid-cols-2 gap-3">
               <InfoRow label="Home Size" value={client.home_size} />
               <InfoRow label="Bedrooms" value={client.num_bedrooms?.toString()} />
@@ -218,19 +206,18 @@ export default async function ClientDetailPage({
 
         {/* Payment */}
         {client.payment_notes && (
-          <CollapsibleSection title="Payment Notes" icon={<DollarSignIcon className="h-4 w-4 text-green-600" />} defaultOpen={false}>
-            <p className="text-sm text-gray-900 whitespace-pre-wrap">{client.payment_notes}</p>
+          <CollapsibleSection title="Payment Notes" icon={<DollarSignIcon className="h-4 w-4 text-green-400" />} defaultOpen={false}>
+            <p className="text-sm text-gray-200 whitespace-pre-wrap">{client.payment_notes}</p>
           </CollapsibleSection>
         )}
 
-        {/* General Notes */}
+        {/* Notes */}
         {client.notes && (
           <CollapsibleSection title="Notes" icon={<FileTextIcon className="h-4 w-4 text-gray-500" />} defaultOpen={false}>
-            <p className="text-sm text-gray-900 whitespace-pre-wrap">{client.notes}</p>
+            <p className="text-sm text-gray-200 whitespace-pre-wrap">{client.notes}</p>
           </CollapsibleSection>
         )}
 
-        {/* Archive */}
         <div className="pt-2 pb-4">
           <DeleteClientButton clientId={client.id} clientName={`${client.first_name} ${client.last_name}`} />
         </div>

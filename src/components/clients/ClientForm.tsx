@@ -306,13 +306,13 @@ export default function ClientForm({ client }: ClientFormProps) {
 
       {/* Pets - conditional */}
       {isPetSitting && (
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
-          <div className="px-4 py-3 bg-purple-50 flex items-center justify-between">
-            <span className="flex items-center gap-2 text-sm font-semibold text-purple-800">
+        <div className="border border-gray-700 rounded-xl overflow-hidden bg-gray-900">
+          <div className="px-4 py-3 bg-purple-950/40 border-b border-purple-800/50 flex items-center justify-between">
+            <span className="flex items-center gap-2 text-sm font-semibold text-purple-300">
               <PawPrintIcon className="h-4 w-4" />
               Pets
               {petFields.length > 0 && (
-                <span className="bg-purple-200 text-purple-800 text-xs px-2 py-0.5 rounded-full">
+                <span className="bg-purple-500/20 text-purple-300 text-xs px-2 py-0.5 rounded-full ring-1 ring-purple-500/30">
                   {petFields.length}
                 </span>
               )}
@@ -321,7 +321,7 @@ export default function ClientForm({ client }: ClientFormProps) {
               type="button"
               variant="ghost"
               size="sm"
-              className="text-purple-700 hover:bg-purple-100 gap-1"
+              className="text-purple-400 hover:bg-purple-900/40 gap-1"
               onClick={() => append(defaultPet())}
             >
               <PlusIcon className="h-4 w-4" />
@@ -334,7 +334,7 @@ export default function ClientForm({ client }: ClientFormProps) {
               <button
                 type="button"
                 onClick={() => append(defaultPet())}
-                className="mt-2 text-sm text-purple-600 font-medium hover:underline"
+                className="mt-2 text-sm text-purple-400 font-medium hover:underline"
               >
                 + Add first pet
               </button>
