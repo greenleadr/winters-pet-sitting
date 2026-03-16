@@ -15,7 +15,6 @@ import PetForm from './PetForm';
 
 interface ClientFormProps {
   client?: Client;
-  userId: string;
 }
 
 const SERVICE_OPTIONS = [
@@ -52,7 +51,7 @@ function defaultPet() {
   };
 }
 
-export default function ClientForm({ client, userId }: ClientFormProps) {
+export default function ClientForm({ client }: ClientFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [globalError, setGlobalError] = useState('');
@@ -110,10 +109,7 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
     },
   });
 
-  const { fields: petFields, append, remove } = useFieldArray({
-    control,
-    name: 'pets',
-  });
+  const { fields: petFields, append, remove } = useFieldArray({ control, name: 'pets' });
 
   const serviceType = watch('service_type') as ServiceType;
   const isPetSitting = serviceType === 'pet_sitting' || serviceType === 'both';
@@ -127,7 +123,6 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
 
     try {
       const clientData = {
-        owner_id: userId,
         first_name: data.first_name.trim(),
         last_name: data.last_name.trim(),
         phone: data.phone.trim() || null,
@@ -141,7 +136,6 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
         gate_code: data.gate_code.trim() || null,
         alarm_code: data.alarm_code.trim() || null,
         parking_instructions: data.parking_instructions.trim() || null,
-        // House cleaning fields (only if applicable)
         home_size: isCleaning ? data.home_size.trim() || null : null,
         num_bedrooms: isCleaning && data.num_bedrooms ? parseInt(data.num_bedrooms) : null,
         num_bathrooms: isCleaning && data.num_bathrooms ? parseInt(data.num_bathrooms) : null,
@@ -157,10 +151,7 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
       let clientId = client?.id;
 
       if (isEditing) {
-        const { error } = await supabase
-          .from('clients')
-          .update(clientData)
-          .eq('id', clientId!);
+        const { error } = await supabase.from('clients').update(clientData).eq('id', clientId!);
         if (error) throw error;
       } else {
         const { data: newClient, error } = await supabase
@@ -172,19 +163,16 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
         clientId = newClient.id;
       }
 
-      // Handle pets if pet sitting
+      // Handle pets
       if (isPetSitting && clientId) {
-        // Get existing pet IDs
         const existingPetIds = (client?.pets || []).map((p) => p.id);
         const submittedPetIds = data.pets.filter((p) => p.id).map((p) => p.id!);
-
-        // Delete removed pets
         const toDelete = existingPetIds.filter((id) => !submittedPetIds.includes(id));
+
         if (toDelete.length > 0) {
           await supabase.from('pets').delete().in('id', toDelete);
         }
 
-        // Upsert pets
         for (const pet of data.pets) {
           const petData = {
             client_id: clientId,
@@ -212,7 +200,6 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
           }
         }
       } else if (!isPetSitting && clientId && isEditing) {
-        // Remove all pets if service type changed away from pet sitting
         await supabase.from('pets').delete().eq('client_id', clientId);
       }
 
@@ -246,23 +233,9 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
             {...register('last_name', { required: 'Required' })}
           />
         </div>
-        <Input
-          label="Phone"
-          type="tel"
-          placeholder="(555) 000-0000"
-          {...register('phone')}
-        />
-        <Input
-          label="Email"
-          type="email"
-          placeholder="jane@example.com"
-          {...register('email')}
-        />
-        <Input
-          label="Address"
-          placeholder="123 Main St, City, ST 00000"
-          {...register('address')}
-        />
+        <Input label="Phone" type="tel" placeholder="(555) 000-0000" {...register('phone')} />
+        <Input label="Email" type="email" placeholder="jane@example.com" {...register('email')} />
+        <Input label="Address" placeholder="123 Main St, City, ST 00000" {...register('address')} />
         <Select
           label="Service Type *"
           options={SERVICE_OPTIONS}
@@ -277,17 +250,8 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
         icon={<AlertCircleIcon className="h-4 w-4 text-red-500" />}
         defaultOpen={false}
       >
-        <Input
-          label="Contact Name"
-          placeholder="John Doe"
-          {...register('emergency_contact_name')}
-        />
-        <Input
-          label="Contact Phone"
-          type="tel"
-          placeholder="(555) 000-0000"
-          {...register('emergency_contact_phone')}
-        />
+        <Input label="Contact Name" placeholder="John Doe" {...register('emergency_contact_name')} />
+        <Input label="Contact Phone" type="tel" placeholder="(555) 000-0000" {...register('emergency_contact_phone')} />
       </CollapsibleSection>
 
       {/* Access & Entry */}
@@ -297,32 +261,12 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
         defaultOpen={false}
       >
         <div className="grid grid-cols-2 gap-3">
-          <Input
-            label="Access Code"
-            placeholder="1234"
-            {...register('access_code')}
-          />
-          <Input
-            label="Gate Code"
-            placeholder="*5678"
-            {...register('gate_code')}
-          />
-          <Input
-            label="Alarm Code"
-            placeholder="9999"
-            {...register('alarm_code')}
-          />
-          <Input
-            label="Key Location"
-            placeholder="Under mat"
-            {...register('key_location')}
-          />
+          <Input label="Access Code" placeholder="1234" {...register('access_code')} />
+          <Input label="Gate Code" placeholder="*5678" {...register('gate_code')} />
+          <Input label="Alarm Code" placeholder="9999" {...register('alarm_code')} />
+          <Input label="Key Location" placeholder="Under mat" {...register('key_location')} />
         </div>
-        <Input
-          label="Parking Instructions"
-          placeholder="Park in driveway…"
-          {...register('parking_instructions')}
-        />
+        <Input label="Parking Instructions" placeholder="Park in driveway…" {...register('parking_instructions')} />
       </CollapsibleSection>
 
       {/* House Cleaning - conditional */}
@@ -333,30 +277,10 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
           defaultOpen={true}
         >
           <div className="grid grid-cols-2 gap-3">
-            <Input
-              label="Home Size"
-              placeholder="1,500 sq ft"
-              {...register('home_size')}
-            />
-            <Select
-              label="Frequency"
-              options={FREQUENCY_OPTIONS}
-              {...register('cleaning_frequency')}
-            />
-            <Input
-              label="Bedrooms"
-              type="number"
-              placeholder="3"
-              min="0"
-              {...register('num_bedrooms')}
-            />
-            <Input
-              label="Bathrooms"
-              type="number"
-              placeholder="2"
-              min="0"
-              {...register('num_bathrooms')}
-            />
+            <Input label="Home Size" placeholder="1,500 sq ft" {...register('home_size')} />
+            <Select label="Frequency" options={FREQUENCY_OPTIONS} {...register('cleaning_frequency')} />
+            <Input label="Bedrooms" type="number" placeholder="3" min="0" {...register('num_bedrooms')} />
+            <Input label="Bathrooms" type="number" placeholder="2" min="0" {...register('num_bathrooms')} />
           </div>
           <Textarea
             label="Cleaning Products Preference"
@@ -364,11 +288,7 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
             rows={2}
             {...register('cleaning_products_preference')}
           />
-          <Input
-            label="Products Location"
-            placeholder="Under kitchen sink"
-            {...register('cleaning_products_location')}
-          />
+          <Input label="Products Location" placeholder="Under kitchen sink" {...register('cleaning_products_location')} />
           <Textarea
             label="Fragile Items / Special Care"
             placeholder="Crystal vase on shelf, antique table…"
@@ -464,22 +384,14 @@ export default function ClientForm({ client, userId }: ClientFormProps) {
         />
       </CollapsibleSection>
 
-      {/* Error message */}
       {globalError && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
           {globalError}
         </div>
       )}
 
-      {/* Submit */}
       <div className="flex gap-3 pt-2 pb-4">
-        <Button
-          type="button"
-          variant="secondary"
-          fullWidth
-          onClick={() => router.back()}
-          disabled={saving}
-        >
+        <Button type="button" variant="secondary" fullWidth onClick={() => router.back()} disabled={saving}>
           Cancel
         </Button>
         <Button type="submit" fullWidth loading={saving}>

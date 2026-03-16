@@ -1,13 +1,12 @@
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { PencilIcon, PhoneIcon, MailIcon, MapPinIcon, AlertCircleIcon, KeyIcon, HomeIcon, PawPrintIcon, DollarSignIcon, FileTextIcon, TrashIcon } from 'lucide-react';
+import { PencilIcon, PhoneIcon, MailIcon, MapPinIcon, AlertCircleIcon, KeyIcon, HomeIcon, PawPrintIcon, DollarSignIcon, FileTextIcon } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import CollapsibleSection from '@/components/ui/CollapsibleSection';
 import DeleteClientButton from '@/components/clients/DeleteClientButton';
-import { Client } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,16 +18,6 @@ export default async function ClientDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user!.id)
-    .single();
-
   const { data: client, error } = await supabase
     .from('clients')
     .select('*, pets(*)')
@@ -38,7 +27,6 @@ export default async function ClientDetailPage({
 
   if (!client || error) return notFound();
 
-  const isOwner = profile?.role === 'owner';
   const isPetSitting = client.service_type === 'pet_sitting' || client.service_type === 'both';
   const isCleaning = client.service_type === 'house_cleaning' || client.service_type === 'both';
 
@@ -69,7 +57,7 @@ export default async function ClientDetailPage({
       />
 
       <div className="px-4 py-3 space-y-3">
-        {/* Service type + quick info */}
+        {/* Service type + quick contact */}
         <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
             {client.service_type === 'pet_sitting' && <Badge variant="purple" size="md">Pet Sitting</Badge>}
@@ -82,7 +70,6 @@ export default async function ClientDetailPage({
             )}
           </div>
 
-          {/* Quick contact */}
           <div className="space-y-2">
             {client.phone && (
               <a href={`tel:${client.phone}`} className="flex items-center gap-2 text-sm text-emerald-700 font-medium">
@@ -110,7 +97,7 @@ export default async function ClientDetailPage({
           </div>
         </div>
 
-        {/* Access / Entry - always show first for quick lookup */}
+        {/* Access & Entry */}
         {(client.access_code || client.key_location || client.gate_code || client.alarm_code || client.parking_instructions) && (
           <CollapsibleSection title="Access & Entry" icon={<KeyIcon className="h-4 w-4 text-amber-600" />} defaultOpen={true}>
             <div className="grid grid-cols-2 gap-3">
@@ -148,7 +135,7 @@ export default async function ClientDetailPage({
           >
             {client.pets && client.pets.length > 0 ? (
               <div className="space-y-4">
-                {client.pets.map((pet: any, i: number) => (
+                {client.pets.map((pet: any) => (
                   <div key={pet.id} className="border-t border-gray-100 pt-3 first:border-0 first:pt-0">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="font-semibold text-sm text-gray-900">{pet.name}</span>
@@ -243,12 +230,10 @@ export default async function ClientDetailPage({
           </CollapsibleSection>
         )}
 
-        {/* Delete (owner only) */}
-        {isOwner && (
-          <div className="pt-2 pb-4">
-            <DeleteClientButton clientId={client.id} clientName={`${client.first_name} ${client.last_name}`} />
-          </div>
-        )}
+        {/* Archive */}
+        <div className="pt-2 pb-4">
+          <DeleteClientButton clientId={client.id} clientName={`${client.first_name} ${client.last_name}`} />
+        </div>
       </div>
     </>
   );

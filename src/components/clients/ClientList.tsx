@@ -3,8 +3,8 @@
 import { useState, useTransition } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { SearchIcon, XIcon, PawPrintIcon, SparklesIcon, UsersIcon } from 'lucide-react';
-import { Client, ServiceType } from '@/lib/types';
+import { SearchIcon, XIcon, UsersIcon } from 'lucide-react';
+import { Client } from '@/lib/types';
 import ClientCard from './ClientCard';
 import { clsx } from 'clsx';
 
@@ -12,7 +12,6 @@ interface ClientListProps {
   clients: Client[];
   searchQuery: string;
   serviceFilter: string;
-  isOwner: boolean;
 }
 
 const SERVICE_FILTERS = [
@@ -22,12 +21,7 @@ const SERVICE_FILTERS = [
   { value: 'both', label: 'Both' },
 ];
 
-export default function ClientList({
-  clients,
-  searchQuery,
-  serviceFilter,
-  isOwner,
-}: ClientListProps) {
+export default function ClientList({ clients, searchQuery, serviceFilter }: ClientListProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [search, setSearch] = useState(searchQuery);
@@ -51,10 +45,6 @@ export default function ClientList({
   const clearSearch = () => {
     setSearch('');
     updateSearch('', serviceFilter);
-  };
-
-  const handleFilterChange = (type: string) => {
-    updateSearch(search, type);
   };
 
   return (
@@ -84,7 +74,7 @@ export default function ClientList({
         {SERVICE_FILTERS.map((f) => (
           <button
             key={f.value}
-            onClick={() => handleFilterChange(f.value)}
+            onClick={() => updateSearch(search, f.value)}
             className={clsx(
               'shrink-0 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors',
               serviceFilter === f.value
@@ -120,7 +110,7 @@ export default function ClientList({
             {clients.length} client{clients.length !== 1 ? 's' : ''}
           </p>
           {clients.map((client) => (
-            <ClientCard key={client.id} client={client} isOwner={isOwner} />
+            <ClientCard key={client.id} client={client} />
           ))}
         </div>
       )}

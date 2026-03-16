@@ -2,13 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UsersIcon, CalendarIcon, SettingsIcon, HomeIcon } from 'lucide-react';
+import { UsersIcon, CalendarIcon } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const navItems = [
   { href: '/clients', label: 'Clients', icon: UsersIcon },
   { href: '/calendar', label: 'Calendar', icon: CalendarIcon },
-  { href: '/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
 export default function BottomNav() {
@@ -25,15 +24,10 @@ export default function BottomNav() {
               href={href}
               className={clsx(
                 'flex-1 flex flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors',
-                active
-                  ? 'text-emerald-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                active ? 'text-emerald-600' : 'text-gray-500 hover:text-gray-700'
               )}
             >
-              <Icon
-                className={clsx('h-5 w-5', active && 'text-emerald-600')}
-                strokeWidth={active ? 2.5 : 1.75}
-              />
+              <Icon className={clsx('h-5 w-5', active && 'text-emerald-600')} strokeWidth={active ? 2.5 : 1.75} />
               {label}
             </Link>
           );

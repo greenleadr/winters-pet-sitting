@@ -1,23 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { PhoneIcon, MapPinIcon, PawPrintIcon, SparklesIcon, ChevronRightIcon } from 'lucide-react';
+import { PhoneIcon, PawPrintIcon, ChevronRightIcon } from 'lucide-react';
 import { Client } from '@/lib/types';
 import Badge from '@/components/ui/Badge';
-import { clsx } from 'clsx';
-
-interface ClientCardProps {
-  client: Client;
-  isOwner: boolean;
-}
 
 function ServiceBadge({ serviceType }: { serviceType: string }) {
-  if (serviceType === 'pet_sitting') {
-    return <Badge variant="purple">Pet Sitting</Badge>;
-  }
-  if (serviceType === 'house_cleaning') {
-    return <Badge variant="blue">Cleaning</Badge>;
-  }
+  if (serviceType === 'pet_sitting') return <Badge variant="purple">Pet Sitting</Badge>;
+  if (serviceType === 'house_cleaning') return <Badge variant="blue">Cleaning</Badge>;
   return (
     <span className="flex gap-1">
       <Badge variant="purple">Pets</Badge>
@@ -26,7 +16,7 @@ function ServiceBadge({ serviceType }: { serviceType: string }) {
   );
 }
 
-export default function ClientCard({ client, isOwner }: ClientCardProps) {
+export default function ClientCard({ client }: { client: Client }) {
   const petCount = client.pets?.length || 0;
   const initials = `${client.first_name[0]}${client.last_name[0]}`.toUpperCase();
 
@@ -36,12 +26,9 @@ export default function ClientCard({ client, isOwner }: ClientCardProps) {
       className="block bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all active:scale-[0.99]"
     >
       <div className="flex items-center gap-3 p-3.5">
-        {/* Avatar */}
         <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-semibold text-sm shrink-0">
           {initials}
         </div>
-
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-gray-900 text-sm">
@@ -64,7 +51,6 @@ export default function ClientCard({ client, isOwner }: ClientCardProps) {
             )}
           </div>
         </div>
-
         <ChevronRightIcon className="h-4 w-4 text-gray-400 shrink-0" />
       </div>
     </Link>

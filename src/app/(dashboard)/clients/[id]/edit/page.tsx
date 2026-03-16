@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import ClientForm from '@/components/clients/ClientForm';
 
@@ -12,12 +12,6 @@ export default async function EditClientPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) redirect('/login');
 
   const { data: client, error } = await supabase
     .from('clients')
@@ -35,7 +29,7 @@ export default async function EditClientPage({
         showBack
         backHref={`/clients/${id}`}
       />
-      <ClientForm client={client} userId={user.id} />
+      <ClientForm client={client} />
     </>
   );
 }

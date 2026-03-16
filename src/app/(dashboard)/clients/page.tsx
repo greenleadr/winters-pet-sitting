@@ -18,18 +18,6 @@ export default async function ClientsPage({
   const query = params.q || '';
   const serviceFilter = params.type || '';
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Get owner's profile to determine the owner_id for queries
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user!.id)
-    .single();
-
-  // Build query - get active clients only
   let dbQuery = supabase
     .from('clients')
     .select('*, pets(*)')
@@ -40,9 +28,8 @@ export default async function ClientsPage({
     dbQuery = dbQuery.eq('service_type', serviceFilter);
   }
 
-  const { data: clients, error } = await dbQuery;
+  const { data: clients } = await dbQuery;
 
-  // Client-side filtering by name (case insensitive)
   let filtered = (clients as Client[]) || [];
   if (query) {
     const q = query.toLowerCase();
@@ -72,7 +59,6 @@ export default async function ClientsPage({
         clients={filtered}
         searchQuery={query}
         serviceFilter={serviceFilter}
-        isOwner={profile?.role === 'owner'}
       />
     </>
   );

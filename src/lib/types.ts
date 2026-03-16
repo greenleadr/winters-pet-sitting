@@ -3,19 +3,9 @@
 // ============================================================
 
 export type ServiceType = 'pet_sitting' | 'house_cleaning' | 'both';
-export type UserRole = 'owner' | 'helper';
 export type CleaningFrequency = 'weekly' | 'biweekly' | 'monthly' | 'as_needed';
 export type OutdoorIndoor = 'indoor' | 'outdoor' | 'both';
 export type PaymentStatus = 'unpaid' | 'paid' | 'pending';
-
-export interface Profile {
-  id: string;
-  email: string | null;
-  full_name: string | null;
-  role: UserRole;
-  created_at: string;
-  updated_at: string;
-}
 
 export interface Pet {
   id: string;
@@ -41,7 +31,6 @@ export interface Pet {
 
 export interface Client {
   id: string;
-  owner_id: string;
   first_name: string;
   last_name: string;
   phone: string | null;
@@ -74,7 +63,6 @@ export interface Client {
 
 export interface Appointment {
   id: string;
-  owner_id: string;
   client_id: string | null;
   title: string;
   start_time: string;
