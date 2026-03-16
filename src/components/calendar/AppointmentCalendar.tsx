@@ -58,7 +58,7 @@ function PaymentBadge({ status }: { status: PaymentStatus }) {
 
 export default function AppointmentCalendar({ appointments, clients }: AppointmentCalendarProps) {
   const router = useRouter();
-  const [view, setView] = useState<View>('week');
+  const [view, setView] = useState<View>('agenda');
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const [newModalOpen, setNewModalOpen] = useState(false);
